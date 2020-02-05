@@ -1,0 +1,26 @@
+{
+	"name": "root/public_html",
+    	"repositories": [{
+		"type":"package",
+		"package": {
+		        "name": "my-org/react-app",
+		        "version": "1.0",
+        		"type": "package",
+        		"source": {
+        			"type": "git",
+        			"reference": "presentation",
+        			"url": "git@github.com:xmvaughan/client-quickstart-js.git"
+			}
+		}
+	}],
+    	"require": {
+        	"mouf/nodejs-installer": "^1.0",
+        	"twilio/sdk": "^5.28",
+        	"fxp/composer-asset-plugin": "^1.4",
+		"xmvaughan/client-quickstart-js": ^0
+    	},
+    	"authors": [{
+            	"name": "Matt Vaughan",
+            	"email": "matt@xmattv.com"
+        }]
+}

@@ -1,0 +1,36 @@
+[06-Oct-2018 21:06:23 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function eregi() in /home/xmattv98/public_html/themes/jackson/_public.php:61
+Stack trace:
+#0 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.template.php(421): gravatar::tplGravatar(Object(ArrayObject), 'class="gravatar...')
+#1 /home/xmattv98/public_html/inc/public/class.dc.template.php(263): template->compileValueNode('gravatar', Object(ArrayObject), 'class="gravatar...')
+#2 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.tplnodevalue.php(30): dcTemplate->compileValueNode('gravatar', Object(ArrayObject), 'class="gravatar...')
+#3 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.tplnode.php(32): tplNodeValue->compile(Object(dcTemplate))
+#4 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.tplnodeblock.php(38): tplNode->compile(Object(dcTemplate))
+#5 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.tplnode.php(32): tplNodeBlock->compile(Object(dcTemplate))
+#6 /home/xmattv98/public_html/inc/libs/clearbricks/t in /home/xmattv98/public_html/themes/jackson/_public.php on line 61
+[06-Oct-2018 21:19:33 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function eregi() in /home/xmattv98/public_html/themes/jackson/_public.php:61
+Stack trace:
+#0 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.template.php(421): gravatar::tplGravatar(Object(ArrayObject), 'class="gravatar...')
+#1 /home/xmattv98/public_html/inc/public/class.dc.template.php(263): template->compileValueNode('gravatar', Object(ArrayObject), 'class="gravatar...')
+#2 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.tplnodevalue.php(30): dcTemplate->compileValueNode('gravatar', Object(ArrayObject), 'class="gravatar...')
+#3 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.tplnode.php(32): tplNodeValue->compile(Object(dcTemplate))
+#4 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.tplnodeblock.php(38): tplNode->compile(Object(dcTemplate))
+#5 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.tplnode.php(32): tplNodeBlock->compile(Object(dcTemplate))
+#6 /home/xmattv98/public_html/inc/libs/clearbricks/t in /home/xmattv98/public_html/themes/jackson/_public.php on line 61
+[06-Oct-2018 21:59:16 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function eregi() in /home/xmattv98/public_html/themes/jackson/_public.php:61
+Stack trace:
+#0 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.template.php(421): gravatar::tplGravatar(Object(ArrayObject), 'class="gravatar...')
+#1 /home/xmattv98/public_html/inc/public/class.dc.template.php(263): template->compileValueNode('gravatar', Object(ArrayObject), 'class="gravatar...')
+#2 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.tplnodevalue.php(30): dcTemplate->compileValueNode('gravatar', Object(ArrayObject), 'class="gravatar...')
+#3 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.tplnode.php(32): tplNodeValue->compile(Object(dcTemplate))
+#4 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.tplnodeblock.php(38): tplNode->compile(Object(dcTemplate))
+#5 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.tplnode.php(32): tplNodeBlock->compile(Object(dcTemplate))
+#6 /home/xmattv98/public_html/inc/libs/clearbricks/t in /home/xmattv98/public_html/themes/jackson/_public.php on line 61
+[06-Oct-2018 21:59:17 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function eregi() in /home/xmattv98/public_html/themes/jackson/_public.php:61
+Stack trace:
+#0 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.template.php(421): gravatar::tplGravatar(Object(ArrayObject), 'class="gravatar...')
+#1 /home/xmattv98/public_html/inc/public/class.dc.template.php(263): template->compileValueNode('gravatar', Object(ArrayObject), 'class="gravatar...')
+#2 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.tplnodevalue.php(30): dcTemplate->compileValueNode('gravatar', Object(ArrayObject), 'class="gravatar...')
+#3 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.tplnode.php(32): tplNodeValue->compile(Object(dcTemplate))
+#4 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.tplnodeblock.php(38): tplNode->compile(Object(dcTemplate))
+#5 /home/xmattv98/public_html/inc/libs/clearbricks/template/class.tplnode.php(32): tplNodeBlock->compile(Object(dcTemplate))
+#6 /home/xmattv98/public_html/inc/libs/clearbricks/t in /home/xmattv98/public_html/themes/jackson/_public.php on line 61
