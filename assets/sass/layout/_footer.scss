@@ -1,42 +1,77 @@
-///
-/// Forty by HTML5 UP
-/// html5up.net | @ajlkn
-/// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-///
-
 /* Footer */
 
 	#footer {
-		.copyright {
-			font-size: 0.8em;
-			list-style: none;
-			padding-left: 0;
+		@include color(accent2);
+		@include padding(8rem, 0);
 
-			li {
-				border-left: solid 1px _palette(border);
-				color: _palette(fg-light);
-				display: inline-block;
-				line-height: 1;
-				margin-left: 1em;
-				padding-left: 1em;
+		a {
+			color: _palette(accent2, fg);
+			text-decoration: none;
+
+			&:hover {
+				color: _palette(accent1, bg);
+			}
+		}
+
+		.content {
+			@include vendor('display', 'flex');
+
+			section {
+				width: 25%;
 
 				&:first-child {
-					border-left: 0;
-					margin-left: 0;
-					padding-left: 0;
+					width: 50%;
+					padding-right: _size(element-margin) * 2;
+				}
+
+				&:last-child {
+					padding-left: _size(element-margin) * 2;
+				}
+			}
+		}
+
+		.copyright {
+			border-top: 1px solid;
+			font-size: 0.8rem;
+			opacity: 0.5;
+			padding: _size(element-margin) 0;
+			text-align: center;
+		}
+
+		@include breakpoint('<=large') {
+			@include padding(4rem, 0);
+		}
+
+		@include breakpoint('<=medium') {
+			.content {
+				@include vendor('flex-wrap', 'wrap');
+
+				section {
+					width: 50%;
+
+					&:first-child {
+						width: 100%;
+						padding-right: 0;
+					}
+				}
+			}
+		}
+
+		@include breakpoint('<=small') {
+			@include padding(3rem, 0);
+
+			.content {
+				section {
+					width: 100%;
+
+					&:last-child {
+						padding-left: 0;
+					}
 				}
 			}
 		}
 
 		@include breakpoint('<=xsmall') {
-			.copyright {
-				li {
-					display: block;
-					border-left: 0;
-					margin-left: 0;
-					padding-left: 0;
-					line-height: inherit;
-				}
-			}
+			@include padding(2rem, 0);
 		}
 	}

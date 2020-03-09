@@ -1,60 +1,30 @@
-///
-/// Forty by HTML5 UP
-/// html5up.net | @ajlkn
-/// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-///
-
 /* Menu */
 
+	$accent: accent2;
+
 	#menu {
+		@include color-typography($accent);
+		@include color-button($accent);
+		@include vendor('transform', 'translateX(#{_size(menu-width)})');
 		@include vendor('transition', (
 			'transform #{_duration(menu)} ease',
-			'opacity #{_duration(menu)} ease',
+			'box-shadow #{_duration(menu)} ease',
 			'visibility #{_duration(menu)}'
 		));
-		@include vendor('align-items', 'center');
-		@include vendor('display', 'flex');
-		@include vendor('justify-content', 'center');
-		@include vendor('pointer-events', 'none');
-		background: transparentize(_palette(bg), 0.1);
+		-webkit-overflow-scrolling: touch;
 		box-shadow: none;
 		height: 100%;
-		left: 0;
-		opacity: 0;
-		overflow: hidden;
-		padding: 3em 2em;
+		max-width: 80%;
+		overflow-y: auto;
+		padding: 3rem 2rem;
 		position: fixed;
+		right: 0;
 		top: 0;
 		visibility: hidden;
-		width: 100%;
+		width: _size(menu-width);
 		z-index: _misc(z-index-base) + 2;
 
-		.inner {
-			@include vendor('transition', (
-				'transform #{_duration(menu)} ease-out',
-				'opacity #{_duration(menu)} ease',
-				'visibility #{_duration(menu)}'
-			));
-			@include vendor('transform', 'rotateX(20deg)');
-			-webkit-overflow-scrolling: touch;
-			max-width: 100%;
-			max-height: 100vh;
-			opacity: 0;
-			overflow: auto;
-			text-align: center;
-			visibility: hidden;
-			width: 18em;
-
-			> :first-child {
-				margin-top: _size(element-margin);
-			}
-
-			> :last-child {
-				margin-bottom: (_size(element-margin) * 1.5);
-			}
-		}
-
-		ul {
+		> ul {
 			margin: 0 0 (_size(element-margin) * 0.5) 0;
 
 			&.links {
@@ -64,26 +34,23 @@
 				> li {
 					padding: 0;
 
-					> a:not(.button) {
+					> a {
 						border: 0;
-						border-top: solid 1px _palette(border);
+						border-top: solid 1px _palette($accent, border);
+						color: inherit;
 						display: block;
-						font-size: 0.8em;
-						font-weight: _font(weight-bold);
-						letter-spacing: _font(letter-spacing-alt);
-						line-height: 4em;
+						letter-spacing: _size(letter-spacing-alt);
+						line-height: 3.5rem;
 						text-decoration: none;
-						text-transform: uppercase;
-					}
 
-					> .button {
-						display: block;
-						margin: 0.5em 0 0 0;
+						&:hover {
+							color: _palette($accent, fg-bold);
+						}
 					}
 
 					&:first-child {
-						> a:not(.button) {
-							border-top: 0 !important;
+						> a {
+							border-top: 0;
 						}
 					}
 				}
@@ -91,74 +58,47 @@
 		}
 
 		.close {
+			@include icon;
 			@include vendor('transition', 'color #{_duration(transition)} ease-in-out');
 			-webkit-tap-highlight-color: rgba(0,0,0,0);
 			border: 0;
+			color: _palette($accent, fg-light);
 			cursor: pointer;
 			display: block;
-			height: 4em;
-			line-height: 4em;
-			overflow: hidden;
-			padding-right: 1.25em;
+			height: 3.25rem;
+			line-height: 3.25rem;
+			padding-right: 1.25rem;
 			position: absolute;
 			right: 0;
 			text-align: right;
-			text-indent: 8em;
 			top: 0;
 			vertical-align: middle;
-			white-space: nowrap;
-			width: 8em;
-
-			&:before, &:after {
-				@include vendor('transition', 'opacity #{_duration(transition)} ease-in-out');
-				background-position: center;
-				background-repeat: no-repeat;
-				content: '';
-				display: block;
-				height: 4em;
-				position: absolute;
-				right: 0;
-				top: 0;
-				width: 4em;
-			}
+			width: 7rem;
 
 			&:before {
-				background-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="0 0 20 20" zoomAndPan="disable"><style>line { stroke: #{_palette(fg-bold)}; stroke-width: 2; }</style><line x1="0" y1="0" x2="20" y2="20" /><line x1="20" y1="0" x2="0" y2="20" /></svg>');
+				content: '\f00d';
+				font-size: 1.25rem;
 			}
 
-			&:after {
-				background-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="0 0 20 20" zoomAndPan="disable"><style>line { stroke: #{_palette(highlight)}; stroke-width: 2; }</style><line x1="0" y1="0" x2="20" y2="20" /><line x1="20" y1="0" x2="0" y2="20" /></svg>');
-				opacity: 0;
+			&:hover {
+				color: _palette($accent, fg-bold);
 			}
 
-			&:hover, &:active {
-				&:after {
-					opacity: 1;
-				}
+			@include breakpoint('<=small') {
+				height: 4rem;
+				line-height: 4rem;
 			}
 		}
-	}
 
-	body.is-ie {
-		#menu {
-			background: transparentize(_palette(bg-alt), 0.025);
+		@include breakpoint('<=small') {
+			padding: 2.5rem 1.75rem;
 		}
 	}
 
 	body.is-menu-visible {
-		#wrapper {
-			@include vendor('filter', 'blur(0.5em)');
-		}
-
 		#menu {
-			@include vendor('pointer-events', 'auto');
-			opacity: 1;
+			@include vendor('transform', 'translateX(0)');
+			box-shadow: 0 0 1.5rem 0 rgba(0,0,0,0.2);
 			visibility: visible;
-
-			.inner {
-				@include vendor('transform', 'none');
-				opacity: 1;
-				visibility: visible;
-			}
 		}
 	}
