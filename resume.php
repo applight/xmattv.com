@@ -31,8 +31,7 @@
 	    <h1>Resume</h1>
 	  </div>
 
-	  <embed src="https://drive.google.com/viewerng/
-viewer?embedded=true&url=https://xmattv.com/Sep2019Resume.pdf" width="100%" height="875">
+	  <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url=https://xmattv.com/Sep2019Resume.pdf" width="100%" height="875">
 	  
 	  <!-- Main -->
 	  <!-- Footer -->
