@@ -23,7 +23,7 @@
 	<p>“Live a good life. <br />If there are gods and they are just, then they will not care how devout you have been, but will welcome you based on the virtues you have lived by. If there are gods, but unjust, then you should not want to worship them. If there are no gods, then you will be gone, but will have lived a noble life that will live on in the memories of your loved ones." <br /> ― Marcus Aurelius
 	<p>
       </div>
-      <!--<video autoplay loop muted playsinline src="images/banner.mp4"></video> -->
+      <video autoplay loop muted playsinline src="images/banner.mp4"></video>
     </section>
     
     <!-- Highlights -->
@@ -47,7 +47,7 @@
 	  <section>
 	    <div class="content">
 	      <header>
-		<a href="https://github.com/xmvaughan" class="icon fa-code"><span class="label">Icon</span></a>
+		<a href="https://github.com/applight" class="icon fa-code"><span class="label">Icon</span></a>
 		<h3>Github</h3>
 	      </header>
 	      <p>A closer look at my code</p>
@@ -92,26 +92,22 @@
     <section class="wrapper">
       <div class="inner">
 	<header class="special">
-	  <h2>Faucibus consequat lorem</h2>
-	  <p>In arcu accumsan arcu adipiscing accumsan orci ac. Felis id enim aliquet. Accumsan ac integer lobortis commodo ornare aliquet accumsan erat tempus amet porttitor.</p>
-	</header>
-	<div class="testimonials">
-	  <section>
-	    <div class="content">
-	      <blockquote>
-		<p>Nunc lacinia ante nunc ac lobortis ipsum. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus.</p>
-	      </blockquote>
-	      <div class="author">
-		<div class="image">
-		  <img src="images/pic01.jpg" alt="" />
-		</div>
-		<p class="credit">- <strong>Jane Doe</strong> <span>CEO - ABC Inc.</span></p>
-	      </div>
-	    </div>
-	  </section>
-	  <section>
-	    <div class="content">
-	      <blockquote>
+	  <h2>Pallabras</h2>
+	  <p>Les mots des gens grandes</p>
+                               </header>
+<div class="testimonials">
+<section>
+     <div class="content">
+     <blockquote><p>“Well-being is attained little by little, and nevertheless is no little thing itself.”</p></blockquote>
+     <div class="author">
+               <div class="image"> <img src="images/pic01.jpg" alt="" /></div>
+                <p class="credit">- <strong>Zeno of Citiumss</strong> <span>Philosopher</span></p>
+      </div>
+      </div>
+</section>
+<section>
+     <div class="content">
+               <blockquote>
 		<p>Nunc lacinia ante nunc ac lobortis ipsum. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus.</p>
 	      </blockquote>
 	      <div class="author">
