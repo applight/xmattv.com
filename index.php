@@ -14,7 +14,7 @@
     <?php require('./header.php'); ?>
     
     <!-- Nav -->
-		<?php require('./nav.php'); ?>
+	<?php require('./nav.php'); ?>
     
     <!-- Banner -->
     <section id="banner">
@@ -23,7 +23,7 @@
 	<p>"Live a good life. <br />If there are gods and they are just, then they will not care how devout you have been, but will welcome you based on the virtues you have lived by. If there are gods, but unjust, then you should not want to worship them. If there are no gods, then you will be gone, but will have lived a noble life that will live on in the memories of your loved ones." <br /> --Marcus Aurelius
 	<p>
       </div>
-      <video autoplay loop muted playsinline src="images/banner.mp4"></video>
+      <video autoplay loop muted playsinline src="./images/banner.mp4"></video>
     </section>
     
     <!-- Highlights -->

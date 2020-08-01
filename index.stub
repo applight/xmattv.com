@@ -5,8 +5,7 @@
             <h1>Hi, my name is Forty</h1>
         </header>
         <div class="content">
-            <p>A responsive site template designed by HTML5 UP<br />
-            and released under the Creative Commons.</p>
+            <p>Matt Vaughan<br /></p>
             <ul class="actions">
                 <li><a href="#one" class="button next scrolly">Get Started</a></li>
             </ul>
