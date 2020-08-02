@@ -53,7 +53,7 @@ if ( isset($_POST['username']) ) {
     . '<label for="lastname">Last Name</label><input type="text" id="lastname" name="lastname"></input><br/>'
     . '<label for="phone_number">Phone Number</label><input type="text" id="phone_number" name="phone_number"></input><br/>'
     . '<label for="pin">Pin</label><input type="text" id="pin" name="pin"></input><br/>'
-    . '<submit name="submit" type="submit" value="submit" id="submit" />'
+    . '<input type="submit" name="submit" value="submit" id="submit" />'
     . '</form>';
 }
 ?>
