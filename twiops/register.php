@@ -7,9 +7,9 @@
 
 <?php 
  
-// we will show the form unless the user has just successfully created an account, 
-// or if we encounter an error that indicates a foreign request or a seriously broken form
-$show_form = true;
+// we will show the form with partial values unless the user has just successfully created an account 
+// or if we encounter an error that indicates a foreign/broken/hacked request
+$show_form_values = true;
 
 // if username is set, we can assume we've received a post...
 if ( isset($_POST['username']) ) {
@@ -46,18 +46,24 @@ if ( isset($_POST['username']) ) {
 
 }
 
-if ( $show_form ) {
-    echo '<form action="./register.php" method="POST">' 
-    . '<label for="username">Username</label><input type="text" id="username" name="username"></input><br/>'
-    . '<label for="password">Password</label><input type="password" id="password" name="password"></input><br/>'
+function ff( $field ) {
+    if ( $show_form_values && isset($_POST[$field]) && htmlspecialchars($_POST[$field]) == $_POST[$field] )
+        return trim(strip_tags($_POST[$field]));
+    else
+        return "";
+}
+
+echo '<form action="./register.php" method="POST">' 
+    . '<label for="username">Username</label><input type="text" id="username" name="username" value="' . ff('username') . '" ></input><br/>'
+    . '<label for="password">Password</label><input type="password" id="password" name="password" value="' . ff('password') . '"></input><br/>'
     . '<label for="password_confirmation">Confirm Password</label><input type="password" id="password_confirmation" name="password_confirmation"></input><br/>'
-    . '<label for="firstname">First Name</label><input type="text" id="firstname" name="firstname"></input><br/>'
-    . '<label for="lastname">Last Name</label><input type="text" id="lastname" name="lastname"></input><br/>'
-    . '<label for="phone_number">Phone Number</label><input type="text" id="phone_number" name="phone_number"></input><br/>'
-    . '<label for="pin">Pin</label><input type="text" id="pin" name="pin"></input><br/>'
+    . '<label for="firstname">First Name</label><input type="text" id="firstname" name="firstname" value="' . ff('firstname') . '"></input><br/>'
+    . '<label for="lastname">Last Name</label><input type="text" id="lastname" name="lastname" value="' . ff('lastname') . '"></input><br/>'
+    . '<label for="phone_number">Phone Number</label><input type="text" id="phone_number" name="phone_number" value="' . ff('phone_number') . '"></input><br/>'
+    . '<label for="pin">Pin</label><input type="text" id="pin" name="pin" value="' . ff('pin') . '"></input><br/>'
     . '<input type="submit" name="submit" value="submit" id="submit" />'
     . '</form>';
-}
+
 
 ?>
 
