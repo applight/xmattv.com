@@ -17,7 +17,7 @@ if ( isset($_POST['username']) ) {
     // check to make sure the post has the rest of the data we need
     if ( !isset($_POST['password']) || !isset($_POST['password_confirmation']) || !isset($_POST['password']) || !isset($_POST['firstname']) 
     || !isset($_POST['lastname']) || !isset($_POST['phone_number']) || !isset($_POST['pin']) ) {
-        $show_form = false;
+        $show_form_values = false;
         echo '<p>We\'re sorry. We had trouble registering your account. Please try again later.</p>';
     }
     // make sure the values passed contain characters we are expecting - only 
@@ -28,7 +28,7 @@ if ( isset($_POST['username']) ) {
     }
     // add the new user to the database and indicate success 
     else {
-        $show_form = false;
+        $show_form_values = false;
 
         $username               = trim(strip_tags($_POST['username']));
         $password               = trim(strip_tags($_POST['password']));
