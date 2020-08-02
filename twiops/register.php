@@ -5,7 +5,10 @@
 <body>
 
 <?php 
- 
+
+// DEBUG FLAG
+$DEBUG = true;
+
 // we will show the form with partial values unless the user has just successfully created an account 
 // or if we encounter an error that indicates a foreign/broken/hacked request
 $show_form_values = true;
@@ -27,19 +30,22 @@ if ( isset($_POST['username']) ) {
     }
     // add the new user to the database and indicate success 
     else {
+        if ( $DEBUG ) {
+            echo '<p>DEBUG TESTING BLOCK REACHED</p>'
+        }
         $show_form_values = false;
 
         $username               = trim(strip_tags($_POST['username']));
         $password               = trim(strip_tags($_POST['password']));
         $password_confirmation  = trim(strip_tags($_POST['passowrd_confirmation']));
         $pin                    = trim(strip_tags($_POST['pin']));
-        $lastname               = trim(strip_tags($_POST['lastnane']));
+        $lastname               = trim(strip_tags($_POST['lastname']));
         $firstname              = trim(strip_tags($_POST['firstname']));
         $phone_number           = trim(strip_tags($_POST['phone_number']));
 
         // create a salt, hash password, database add
 
-        echo '<p>We successfully added ' . $_POST['username'] . ' to our database<br/>'
+        echo '<p>We successfully added ' . $username . ' to our database<br/>'
         . 'click <a href="./login.php">here</a> to login!</p>';
     }
 
