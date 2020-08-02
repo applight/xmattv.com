@@ -44,7 +44,9 @@ if ( isset($_POST['username']) ) {
         . 'click <a href="./login.php">here</a> to login!</p>';
     }
 
-} else {
+}
+
+if ( $show_form ) {
     echo '<form action="./register.php" method="POST">' 
     . '<label for="username">Username</label><input type="text" id="username" name="username"></input><br/>'
     . '<label for="password">Password</label><input type="password" id="password" name="password"></input><br/>'
@@ -56,6 +58,7 @@ if ( isset($_POST['username']) ) {
     . '<input type="submit" name="submit" value="submit" id="submit" />'
     . '</form>';
 }
+
 ?>
 
 </body>
