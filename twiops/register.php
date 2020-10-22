@@ -31,7 +31,7 @@ if ( isset($_POST['username']) ) {
     // add the new user to the database and indicate success 
     else {
         if ( $DEBUG ) {
-            echo '<p>DEBUG TESTING BLOCK REACHED</p>'
+            echo '<p>DEBUG TESTING BLOCK REACHED</p>';
         }
         $show_form_values = false;
 
@@ -52,7 +52,10 @@ if ( isset($_POST['username']) ) {
 }
 
 function ff( $field ) {
-    if ( $show_form_values && isset($_POST[$field]) && htmlspecialchars($_POST[$field]) == $_POST[$field] )
+    if ( ! $_SESSION['show_reg_form_vals'] ) {
+        return "";
+    }
+    else if ( isset($_POST[$field]) && htmlspecialchars($_POST[$field],) == $_POST[$field] )
         return trim(strip_tags($_POST[$field]));
     else
         return "";
