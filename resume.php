@@ -16,12 +16,7 @@
 	<body class="is-preload">
 	  
 	  <!-- Header -->
-	  <header id="header">
-	    <a class="logo" href="index.html">Software Engineer</a>
-	    <nav>
-	      <a href="#menu">Menu</a>
-	    </nav>
-	  </header>
+	  <?php require('./header.php');  ?>
 	  
 	  <!-- Nav -->
 	  <?php require('./nav.php'); ?>
