@@ -59,10 +59,10 @@
 		    <section>
 			<div class="content">
 			    <header>
-				<a href="./assistant.php" class="icon fa-phone"><span class="label">Icon</span></a>
-				<h3>Twilio Project</h3>
+				<a href="/blog/index.php" class="icon fa-phone"><span class="label">Icon</span></a>
+				<h3>Blog</h3>
 			    </header>
-			    <p>My voicemail digital assistant</p>
+			    <p>My autopublishing blog - Also check the code on <a href="https://github.com/applight/blog">github</a></p>
 			</div>
 		    </section>
 
