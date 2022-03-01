@@ -27,8 +27,9 @@
 	    <!-- <img src="./images/banner.jpg"></img> -->
 	    <!--<video autoplay loop muted playsinline src="./images/banner.mp4"></video>-->
 	</section>
-	    <iframe style="width: 100%; height: 900px;" src="https://xmattv.com/blog/index.php" title="Blog"></iframe>
-	
+	<div style="height:900px;">
+	<iframe style="width: 100%; height: 900px;" src="https://xmattv.com/blog/index.php" title="Blog"></iframe>
+	</div>
 	<!-- Footer -->
  	<?php require('./footer.php'); ?>
 	
