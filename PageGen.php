@@ -81,7 +81,7 @@ class PageGen {
     }
 
     public function optin() {
-        return '<form><span> Enter phone number to opt in to alerts here: <input type="text"></input><input type="submit"/></span>';
+        return '<form><span> Enter phone number to opt in to alerts here: <input type="text"></input><input type="submit" value="optIn"/></span>';
     }
 
 };
