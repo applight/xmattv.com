@@ -1,4 +1,5 @@
 <?php
+require_once("./FormBuilder.php");
 
 class PageGen {
 
@@ -52,7 +53,7 @@ class PageGen {
         . '<div class="content">'
         . '<section>'
         . ' <h3>Consistent effort over time</h3>'
-        . '  <p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing. Lorem ipsum dolor vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing sed feugiat eu faucibus. Integer ac sed amet praesent. Nunc lacinia ante nunc ac gravida.</p>'
+        . '  <p>Most skills can be learned to a suprising level of mastery with a few minutes to a few hours at a time, daily or weekly, until one finds themself satisfied they have made a real x-y-z of themself</p>'
         . '</section>'
         . '<section>'
         . ' <h4>Things I want to support</h4>'
@@ -64,7 +65,7 @@ class PageGen {
         . '<section>'
         . '<h4>Me on social media</h4>'
         . '<ul class="plain">'
-        . ' <li><a href="https://github.com/xmvaughan"><i class="icon fa-github">&nbsp;</i>Github</a></li>'
+        . ' <li><a href="https://github.com/applight"><i class="icon fa-github">&nbsp;</i>Github</a></li>'
         . ' <li><a href="https://www.linkedin.com/in/xmvaughan/"><i class="icon fa-linkedin">&nbsp;</i>LinkedIn</a></li>'
         . ' <li><a href="https://www.facebook.com/m.v.n.x.x"><i class="icon fa-facebook">&nbsp;</i>Facebook</a></li>'
         . ' <li><a href="https://www.instagram.com/x.mattv/"><i class="icon fa-instagram">&nbsp;</i>Instagram</a></li>'
@@ -80,8 +81,23 @@ class PageGen {
             .'<script src="assets/js/main.js"></script>';
     }
 
+
+    public function registerForm() {
+        $fb = new FormBuilder('POST', 'register.php');
+        $fb->name("First Name", "first", "first", true);
+        $fb->name("Last Name", "last", "last", true);
+        $fb->email('email', true);
+        $fb->submit("Register");
+        return $fb->toString();
+    }
+
     public function optin() {
-        return '<form><span> Enter phone number to opt in to alerts here: <input type="text"></input><input type="submit" value="optIn"/></span>';
+        $fb = new FormBuilder('POST','');
+        $fb->text("Number","number","number","[\+]?[0-9]+",true,"+18005551212");
+        $fb->submit("Opt In");
+        return <<<EOF
+            Enter phone number to opt in to alerts here: {$fb->toString()}
+            EOF;
     }
 
 };

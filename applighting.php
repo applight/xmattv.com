@@ -1,4 +1,5 @@
-<?php require('./PageGen.php'); 
+<?php 
+require_once('./PageGen.php'); 
 $pagegen = PageGen::title('App Lighting');
 ?>
 <!DOCTYPE HTML>
@@ -46,6 +47,12 @@ $pagegen = PageGen::title('App Lighting');
     </section>  
 
     <?php 
+
+		$fb = new FormBuilder("POST", "applighting.php");
+		$fb->text("First Name", "first", "first", "[a-zA-Z ]+", true, "first name");
+		$fb->text("Last Name", "last", "last","[a-zA-Z ]+", true, "last name" );
+		$fb->submit("submit");
+		echo $fb->toString();
         echo $pagegen->footer();
         echo $pagegen->tailscripts();
     ?>
