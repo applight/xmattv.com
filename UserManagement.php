@@ -7,13 +7,20 @@ class MyDB extends SQLite3 {
     }
 
     public function attempt($q, $succ="Success!") {
-        $ret = $this->exec($q);
-        if(!$ret) {
-            return $this->lastErrorMsg();
-        } else {
-            return $succ;
-        }
+        return $this->exec($q) ? $succ : $this->lastErrorMsg();
     }
+
+    /**
+     * returns []   if no key-value match exits in TABLE $table
+     *              otherwise, returns the row as an assoc array
+     */
+    public function exists($key, $value, $table) {
+        $q =<<<EOF
+        SELECT * from {$table} WHERE {$key}={$value};
+        EOF;
+        return $this->querySingle($q, true);
+    }
+
 }
 
 
@@ -39,7 +46,8 @@ class UserManagement {
             EMAIL           TEXT    NOT NULL,
             EMAIL_VERIFIED  INT     NOT NULL,
             PHONE           INT     NOT NULL,
-            PHONE_VERIFIED  INT     NOT NULL);
+            PHONE_VERIFIED  INT     NOT NULL,
+            PASSWORD_HASH   TEXT    NOT NULL);
             EOF,
             "User table successfully created!\n"    
         );
@@ -53,24 +61,40 @@ class UserManagement {
             "Notifications table successfully created!\n"
         );
 
-
         $db->close();
 
     }
 
-    static function incNotifications( $phone ) {
+    static public function incNotifications( $phone ) {
+        $db = new MyDB();
 
+        $row  = $db->exists("PHONE", $phone, "NOTIFICATIONS");
+        
+        $q = $row == [] ?
+        <<<EOF
+        INSERT INTO NOTIFICATIONS (PHONE,NOTIFICATIONS)
+        VALUES ($phone, 1);
+        EOF
+        :
+        <<<EOF
+        UPDATE NOTIFICATIONS set NOTIFICATIONS = {$row[NOTIFICATIONS] + 1} 
+        WHERE PHONE={$phone};
+        EOF;
+    
+        $ret = $db->query($q);
+        $db->close();
+        return $ret;
     }
 
-    static function seeNotifications( $phone ) {
+    static public function seeNotifications( $phone ) {
         
     }
 
-    static function registerUser( $first, $last, $email, $phone ) {
+    static public function registerUser( $first, $last, $email, $phone ) {
 
     }
 
-    static function verifyEmail( $id ) {
+    static public function verifyEmail( $id ) {
 
     }
     
