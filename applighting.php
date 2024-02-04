@@ -22,8 +22,6 @@ $pagegen = PageGen::title('App Lighting');
 		<p>"Live a good life. <br />If there are gods and they are just, then they will not care how devout you have been, but will welcome you based on the virtues you have lived by. If there are gods, but unjust, then you should not want to worship them. If there are no gods, then you will be gone, but will have lived a noble life that will live on in the memories of your loved ones." <br /> --Marcus Aurelius
 		    <p>
 	    </div>
-	    <!-- <img src="./images/banner.jpg"></img> -->
-	    <!--<video autoplay loop muted playsinline src="./images/banner.mp4"></video>-->
 	</section>
 	
 	<!-- Highlights -->
@@ -43,14 +41,14 @@ $pagegen = PageGen::title('App Lighting');
 				</div>
 				</section>
             </div>
-        </div>
+        </div>	w
     </section>  
 
     <?php 
-
-		$fb = new FormBuilder("POST", "applighting.php");
+	$fb = new FormBuilder("POST", "applighting.php");
 		$fb->text("First Name", "first", "first", "[a-zA-Z ]+", true, "first name");
 		$fb->text("Last Name", "last", "last","[a-zA-Z ]+", true, "last name" );
+		$fb->email("email", true);
 		$fb->submit("submit");
 		echo $fb->toString();
         echo $pagegen->footer();

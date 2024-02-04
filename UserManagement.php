@@ -21,6 +21,18 @@ class MyDB extends SQLite3 {
         return $this->querySingle($q, true);
     }
 
+    public function select($key, $value, $table) {
+        return $this->query(<<<EOF
+        SELECT * from {$table} WHERE {$key}={$value};
+        EOF);
+    }
+
+    public function firstSelect($key, $value, $table) {
+        return $this->querySingle(<<<EOF
+        SELECT * from {$table} WHERE {$key}={$value}; 
+        EOF, true);
+    }
+
 }
 
 
@@ -46,8 +58,7 @@ class UserManagement {
             EMAIL           TEXT    NOT NULL,
             EMAIL_VERIFIED  INT     NOT NULL,
             PHONE           INT     NOT NULL,
-            PHONE_VERIFIED  INT     NOT NULL,
-            PASSWORD_HASH   TEXT    NOT NULL);
+            PHONE_VERIFIED  INT     NOT NULL)
             EOF,
             "User table successfully created!\n"    
         );
@@ -65,29 +76,45 @@ class UserManagement {
 
     }
 
-    static public function incNotifications( $phone ) {
+    static public function doNotifications( $phone, $f ) {
         $db = new MyDB();
 
         $row  = $db->exists("PHONE", $phone, "NOTIFICATIONS");
         
-        $q = $row == [] ?
-        <<<EOF
-        INSERT INTO NOTIFICATIONS (PHONE,NOTIFICATIONS)
-        VALUES ($phone, 1);
-        EOF
-        :
-        <<<EOF
-        UPDATE NOTIFICATIONS set NOTIFICATIONS = {$row[NOTIFICATIONS] + 1} 
-        WHERE PHONE={$phone};
-        EOF;
-    
+        $q = null;
+        if ($row == []) {
+            $q =<<<EOF
+            INSERT INTO NOTIFICATIONS (PHONE,NOTIFICATIONS)
+            VALUES ($phone, 1);
+            EOF;
+        } else {
+            $notes = $f($row['NOTIFICATIONS']);
+            $q =<<<EOF
+            UPDATE NOTIFICATIONS set NOTIFICATIONS = {$notes} 
+            WHERE PHONE={$phone};
+            EOF;
+        }
+
         $ret = $db->query($q);
         $db->close();
         return $ret;
     }
 
+    static public function incNotifications( $phone ) {
+        return doNotifications( $phone, function ($noteCount) { return $noteCount++; } );
+    }
+
     static public function seeNotifications( $phone ) {
-        
+        return doNotifications( $phone, function ($noteCount) { return 0; } );
+    }
+
+    static public function getNotifications( $phone ) {
+        $row = $db->exists("PHONE", $phone, "NOTIFICATIONS");
+        if ($row != []) {
+            return $row['NOTIFICATIONS'];
+        } else {
+            return 0;
+        }
     }
 
     static public function registerUser( $first, $last, $email, $phone ) {
@@ -102,7 +129,6 @@ class UserManagement {
 
     }
 
-    static
 }
 
 ?>

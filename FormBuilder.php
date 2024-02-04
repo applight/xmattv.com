@@ -1,6 +1,5 @@
 <?php
 class FormBuilder {
-    
     private $method;
     private $action;
     private $fields = [];
@@ -10,14 +9,19 @@ class FormBuilder {
         $this->action = $action;
     } 
 
-    public function name($label, $id, $name, $required) {
+    public function name($label, $id, $name, $required=false) {
         return text($label, $id, $name, "/^[a-zA-Z]+$/", $required, $label);
     }
 
-    public function email($id, $required) {
-        return text("email", $id, "email",
+    public function email($id, $required=false) {
+        return text("Email", $id, "email",
             "/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/", 
             $required, "email@example.com");
+    }
+
+    public function phone($id, $required=false) {
+        return text("Phone number", $id, "phone",
+        "/^(\+1)([0-9]{10})$/", true, "phone number");
     }
 
     public function text($label, $id, $name, $regex, $required, $placeholder) {
@@ -52,11 +56,14 @@ class Text extends Field {
     }
 
     public function toString() {
-        return "<label for=\"{$this->name}\">{$this->label}:</label>"
-            . "<input type=\"text\" id=\"{$this->id}\" pattern=\"{$this->regex}\" "
-            . "name=\"{$this->name}\" "
-            . "placeholder=\"{$this->placeholder}\" "
-            . ( $this->required ? "required" : "" ) . " >"; 
+        $req = $this->required ? "required" : "";
+
+        $str =<<<EOF
+        <label for="{$this->name}">{$this->label}:</label>
+        <input type="text" id="{$this->id}" pattern="{$this->regex}" name="{$this->name}" placeholder="{$this->placeholder}" {$req} >
+        EOF;
+
+        return $str;
     }
 };
 
