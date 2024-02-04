@@ -89,17 +89,17 @@ class PageGen {
         return '<script src="assets/js/jquery.min.js"></script>'
             .'<script src="assets/js/browser.min.js"></script>'
             .'<script src="assets/js/breakpoints.min.js"></script>'
-            .'<script src="assets/js/util.js"></script>'
+            .'<script src="assets/js/util.js"></script>'  
             .'<script src="assets/js/main.js"></script>';
     }
 
 
-    public function registerForm() {
-        $fb = new FormBuilder('POST', 'register.php');
+    public function registrationForm() {
+        $fb = new FormBuilder('POST', '');
         $fb->name("First Name", "first", "first", true);
         $fb->name("Last Name", "last", "last", true);
-        $fb->email('email', true);
-        $fb->phone('phone',true);
+        $fb->email("email", true);
+        $fb->phone("phone", true);
         $fb->submit("Register");
         return $fb->toString();
     }

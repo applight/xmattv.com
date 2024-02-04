@@ -31,6 +31,7 @@ class FormBuilder {
 
     public function submit($value) {
         $this->fields[] = new Submit($value);
+        return $this;
     }
 
     public function toString() {
@@ -56,14 +57,12 @@ class Text extends Field {
     }
 
     public function toString() {
-        $req = $this->required ? "required" : "";
+        $req = ($this->required ? "required" : "");
 
-        $str =<<<EOF
+        return <<<EOF
         <label for="{$this->name}">{$this->label}:</label>
         <input type="text" id="{$this->id}" pattern="{$this->regex}" name="{$this->name}" placeholder="{$this->placeholder}" {$req} >
         EOF;
-
-        return $str;
     }
 };
 

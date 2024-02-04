@@ -16,10 +16,11 @@ $pagegen = PageGen::title('Matt Vaughan Consulting');
 <!-- Banner -->
 <?php echo $pagegen->banner(); ?>
 
-    <?php 
-        echo $pagegen->optIn();
-        echo $pagegen->footer();
-        echo $pagegen->tailscripts();
-    ?>
+<?php 
+	//echo $pagegen->registrationForm();
+	echo $pagegen->optIn();
+	echo $pagegen->footer();
+	echo $pagegen->tailscripts();
+?>
 </body>
 </html>
