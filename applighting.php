@@ -41,7 +41,7 @@ $pagegen = PageGen::title('App Lighting');
 				</div>
 				</section>
             </div>
-        </div>	w
+        </div>
     </section>  
 
     <?php 
