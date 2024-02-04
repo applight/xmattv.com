@@ -58,7 +58,8 @@ class UserManagement {
             EMAIL           TEXT    NOT NULL,
             EMAIL_VERIFIED  INT     NOT NULL,
             PHONE           INT     NOT NULL,
-            PHONE_VERIFIED  INT     NOT NULL)
+            PHONE_VERIFIED  INT     NOT NULL,
+            OTP             TEXT    NULL)
             EOF,
             "User table successfully created!\n"    
         );
@@ -118,15 +119,55 @@ class UserManagement {
     }
 
     static public function registerUser( $first, $last, $email, $phone ) {
-
+        if ( $db->exists("EMAIL", $email, "USERS") == [] ) {
+            return $db->query(<<<EOF
+            INSERT INTO USERS (FIRST_NAME,LAST_NAME,EMAIL,EMAIL_VERIFIED,PHONE,PHONE_VERIFIED) 
+            VALUES ({$first},{$last},{$email},0,{$phone},0);
+            EOF);
+        }
+        return false;
     }
 
+    /**
+     * returns  false if the user is not registered
+     *          otherwise: the result of the query
+     */
     static public function verifyEmail( $id ) {
-
+        if ( $db->exists("ID", $id, "USERS") != [] ) {
+            return $db->query(<<<EOF
+            UPDATE USERS set EMAIL_VERIFIED = 1 
+            WHERE ID={$id};
+            EOF);
+        }
+        return false;
     }
     
+    /**
+     * returns  false if the user is not registered
+     *          otherwise: the result of the query
+     */
     static function verifyPhone( $id ) {
+        if ( $db->exists("ID", $id, "USERS") != [] ) {
+            return $db->query(<<<EOF
+            UPDATE USERS set PHONE_VERIFIED = 1 
+            WHERE ID={$id};
+            EOF);
+        }
+        return false;
+    }
 
+    static function newOTP( $id ) {
+        if ( $db->exists("ID", $id, "USERS") != [] ) {
+
+            // TODO: authy for OTP
+            $otp = "0000000";
+
+            return $db->query(<<<EOF
+            UPDATE USERS set OTP = {$otp} 
+            WHERE ID={$id};
+            EOF);
+        }
+        return false;
     }
 
 }

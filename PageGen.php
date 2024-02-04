@@ -99,6 +99,7 @@ class PageGen {
         $fb->name("First Name", "first", "first", true);
         $fb->name("Last Name", "last", "last", true);
         $fb->email('email', true);
+        $fb->phone('phone',true);
         $fb->submit("Register");
         return $fb->toString();
     }
