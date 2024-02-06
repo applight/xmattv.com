@@ -1,5 +1,10 @@
 <?php
 
+require_once './vendor/autoload.php';
+
+use Twilio\Rest\Client;
+$twilio = new Client(getenv("TWILIO_ACCOUNT_SID"), getenv("TWILIO_AUTH_TOKEN"));
+
 class MyDB extends SQLite3 {
     
     public function __construct() {
@@ -109,6 +114,7 @@ class UserManagement {
         return doNotifications( $phone, function ($noteCount) { return 0; } );
     }
 
+    /*
     static public function getNotifications( $phone ) {
         $row = $db->exists("PHONE", $phone, "NOTIFICATIONS");
         if ($row != []) {
@@ -117,6 +123,7 @@ class UserManagement {
             return 0;
         }
     }
+    */
 
     static public function registerUser( $first, $last, $email, $phone ) {
         if ( $db->exists("EMAIL", $email, "USERS") == [] ) {
@@ -156,7 +163,7 @@ class UserManagement {
         return false;
     }
 
-    static function newOTP( $id ) {
+    static function newOTP( $id, $otp ) {
         if ( $db->exists("ID", $id, "USERS") != [] ) {
 
             // TODO: authy for OTP

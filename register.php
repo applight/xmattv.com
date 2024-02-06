@@ -17,7 +17,7 @@ $pagegen = PageGen::title('Matt Vaughan Consulting');
 <?php echo $pagegen->banner(); ?>
 
 <?php 
-	echo $pagegen->optIn();
+	echo $pagegen->regForm();
 	echo $pagegen->footer();
 	echo $pagegen->tailscripts();
 ?>

@@ -1,6 +1,9 @@
 <?php
 require_once("./FormBuilder.php");
 
+session_start();
+$_SESSION['loggedIn'] = false;
+
 class PageGen {
 
     private static $instance = null;
@@ -39,11 +42,13 @@ class PageGen {
     public function nav() {
         return "<nav id=\"menu\">" 
         ."<ul class=\"links\">" 
-        ."<li><a href=\"index.php\">Home</a></li>" 
+        ."<li><a href=\"index.php\">Home</a></li>"
         ."<li><a href=\"resume.php\">Resume</a></li>" 
         ."<li><a href=\"blog.php\">Blog</a></li>" 
         ."<li><a href=\"sms.php\">Two way messaging</a></li>" 
         ."<li><a href=\"assistant.php\">Twilio Assistant</a></li>" 
+        ."<li><a href=\"" 
+        . ($_SESSION['loggedIn'] ? "logout.php\">Log Out</a></li>" : "login.php\">Log In</a></li><li><a href=\"register.php\">Register</a></li>")
         ."</ul></nav>";
     }
 
@@ -92,9 +97,8 @@ class PageGen {
             .'<script src="assets/js/util.js"></script>'  
             .'<script src="assets/js/main.js"></script>';
     }
-
-
-    public function registrationForm() {
+    
+    public function regForm() {
         $fb = new FormBuilder('POST', '');
         $fb->name("First Name", "first", "first", true);
         $fb->name("Last Name", "last", "last", true);
@@ -112,6 +116,7 @@ class PageGen {
             Enter phone number to opt in to alerts here: {$fb->toString()}
             EOF;
     }
+
 
 };
 

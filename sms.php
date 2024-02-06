@@ -26,20 +26,34 @@ echo $pagegen->header();
 echo $pagegen->nav(); 
 echo $pagegen->banner(); 
 
-$conversations = [];
+$msgs = [];
 
 $messages = $twilio->messages->read([], 20);
 
 echo "<div><ol>";
 foreach ($messages as $record) {
-    echo "<li>from {$record->from} to {$record->to} : {$record->body}</li>";
-	if ( !isset($conversations[$record->from]) ) $conversations[$record->from] = [];
+  echo "<li>from {$record->from} to {$record->to} : {$record->body}</li>";
+
+  $high = max($record->from, $record->to);
+  $lo   = min($record->from, $record->to);
+
+  if ( !isset($msgs[$high."->".$lo]) )
+    $msgs[$high."->".$lo] = [];
+  
+  $msgs[$high."->".$lo][] = $record;
 }
 echo "</ol></div>";
 
 echo "<div><ul>";
-foreach ($conversations as $from => $arr) {
-	echo "<lh>{$from}</lh>";
+foreach ($msgs as $highlo => $ms) {
+	echo "<lh>{$highlo}</lh>";
+  foreach ($ms as $m) {
+    if ( max($m->from,$m->to) == $m->from ) {
+      echo "<li class=\"msgLeft\" >{$m->from} : {$m->body}</li>";
+    } else {
+      echo "<li class=\"msgRight\" >{$m->from} : {$m->body}</li>";
+    }
+  }
 }
 echo "</ul></div>";
 
