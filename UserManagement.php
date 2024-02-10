@@ -8,6 +8,7 @@ $twilio = new Client(getenv("TWILIO_ACCOUNT_SID"), getenv("TWILIO_AUTH_TOKEN"));
 class MyDB extends SQLite3 {
     
     public function __construct() {
+        parent::__construct();
         $this->open('users.db');
     }
 
@@ -40,11 +41,9 @@ class MyDB extends SQLite3 {
 
 }
 
-
-
 class UserManagement {
 
-    static function createDatabase() {
+    static private function createDatabase() {
         
         // opens or creates sqllite database
         $db = new MyDB();
@@ -64,7 +63,7 @@ class UserManagement {
             EMAIL_VERIFIED  INT     NOT NULL,
             PHONE           INT     NOT NULL,
             PHONE_VERIFIED  INT     NOT NULL,
-            OTP             TEXT    NULL)
+            TOKEN           TEXT    NULL)
             EOF,
             "User table successfully created!\n"    
         );
@@ -77,9 +76,7 @@ class UserManagement {
             EOF,
             "Notifications table successfully created!\n"
         );
-
         $db->close();
-
     }
 
     static public function doNotifications( $phone, $f ) {
@@ -114,24 +111,18 @@ class UserManagement {
         return doNotifications( $phone, function ($noteCount) { return 0; } );
     }
 
-    /*
-    static public function getNotifications( $phone ) {
-        $row = $db->exists("PHONE", $phone, "NOTIFICATIONS");
-        if ($row != []) {
-            return $row['NOTIFICATIONS'];
-        } else {
-            return 0;
-        }
-    }
-    */
-
+    /**
+     * check arguments for validity, this is injection suceptable 
+     */
     static public function registerUser( $first, $last, $email, $phone ) {
         if ( $db->exists("EMAIL", $email, "USERS") == [] ) {
-            return $db->query(<<<EOF
+            $db->query(<<<EOF
             INSERT INTO USERS (FIRST_NAME,LAST_NAME,EMAIL,EMAIL_VERIFIED,PHONE,PHONE_VERIFIED) 
             VALUES ({$first},{$last},{$email},0,{$phone},0);
             EOF);
+            return ($db->exists("EMAIL", $email, "USERS"))["ID"];
         }
+        // user existed
         return false;
     }
 
@@ -140,6 +131,7 @@ class UserManagement {
      *          otherwise: the result of the query
      */
     static public function verifyEmail( $id ) {
+
         if ( $db->exists("ID", $id, "USERS") != [] ) {
             return $db->query(<<<EOF
             UPDATE USERS set EMAIL_VERIFIED = 1 
@@ -153,26 +145,50 @@ class UserManagement {
      * returns  false if the user is not registered
      *          otherwise: the result of the query
      */
-    static function verifyPhone( $id ) {
-        if ( $db->exists("ID", $id, "USERS") != [] ) {
-            return $db->query(<<<EOF
-            UPDATE USERS set PHONE_VERIFIED = 1 
-            WHERE ID={$id};
-            EOF);
+    static function verifyPhone( $id, $userOtp ) {
+        $row = $db->exists("ID", $id, "USERS");
+        if ( $row != [] ) {
+            $verification_check = verifyOtp( $id, $userOtp );
+            
+            if ( $verification_check && $verification_check != false ) { 
+                if ( $verification_check->status == "approved" ) { 
+                    return $db->query(<<<EOF
+                    UPDATE USERS set PHONE_VERIFIED = 1 
+                    WHERE ID={$id};
+                    EOF);
+                } else {
+                    return $db->query(<<<EOF
+                    UPDATE USERS set PHONE_VERIFIED = 0 
+                    WHERE ID={$id};
+                    EOF);
+                }
+            }
         }
         return false;
     }
 
-    static function newOTP( $id, $otp ) {
-        if ( $db->exists("ID", $id, "USERS") != [] ) {
+    static function verifyOtp( $id, $userOtp ) {
+        $row = $db->exists("ID", $id, "USERS");
+        if ( $row != [] ) {
+            return $twilio->verify->v2->services("VA682a63884e464fbbcaab78d1f71af91a")
+            ->verificationChecks
+            ->create([
+                        "to" => $row['PHONE'],
+                        "code" => $userOtp
+            ]);
+        }
+        return false;
+    }
 
-            // TODO: authy for OTP
-            $otp = "0000000";
+    static function newOtp( $id ) {
+        $row = $db->exists("ID", $id, "USERS");
+        if ( $row != [] ) {
 
-            return $db->query(<<<EOF
-            UPDATE USERS set OTP = {$otp} 
-            WHERE ID={$id};
-            EOF);
+            $verification = $twilio->verify->v2->services("VA682a63884e464fbbcaab78d1f71af91a")
+            ->verifications
+            ->create($row['PHONE'], "sms");
+
+            return $verification;
         }
         return false;
     }

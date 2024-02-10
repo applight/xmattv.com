@@ -27,6 +27,12 @@ class FormBuilder {
         return $this;
     }
 
+    public function code($id) {
+        $this->fields[] = new Text("One time code", $id, "code",
+        "/^([0-9]{7})$/", true, "0012300");
+        return $this;
+    }
+
     public function text($label, $id, $name, $regex, $required, $placeholder) {
         $this->fields[] = new Text($label, $id, $name, $regex, $required, $placeholder);
         return $this;

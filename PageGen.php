@@ -1,8 +1,8 @@
 <?php
 require_once("./FormBuilder.php");
+require_once("./UserManagement.php");
 
 session_start();
-$_SESSION['loggedIn'] = false;
 
 class PageGen {
 
@@ -99,12 +99,57 @@ class PageGen {
     }
     
     public function regForm() {
-        $fb = new FormBuilder('POST', '');
+        $fb = new FormBuilder('POST', './register.php');
         $fb->name("First Name", "first", "first", true);
         $fb->name("Last Name", "last", "last", true);
         $fb->email("email", true);
         $fb->phone("phone", true);
         $fb->submit("Register");
+        return $fb->toString();
+    }
+
+    public function otp() {
+
+
+        $test_input = function($data) {
+            $data = trim($data);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data);
+            return $data;
+        };
+
+        $first = test_input($_POST["first"]);
+        if (!preg_match("/^[a-zA-Z]+$/",$first)) {
+            return "<p>Only letters allowed in a first name</p>";
+        }
+
+        $last = test_input($_POST["last"]);
+        if (!preg_match("/^[a-zA-Z]+$/",$last)) {
+            return "<p>Only letters allowed in a last name</p>";
+        }
+
+        $email = test_input($_POST["email"]);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return "<p>Invalid email format</p>";
+        }
+
+        $phone = test_input($_POST["phone"]);
+        if (!preg_match("/^(\+1)([0-9]{10})$/",$phone)) {
+            return "<p>Phone must be in the format +18005551212</p>";
+        }
+
+        $id = UserManagement::registerUser($first,$last,$email,$phone);
+        if ( ! $id  ) {
+            return "<p>Failed to register user</p>";
+        }
+
+        if ( ! UserManagement::newOtp($id) ) {
+            return "<p>Couldn't generate one-time-password</p>";
+        }
+
+        $fb = new FormBuilder('POST', './register.php');
+        $fb->code("code");
+        $fb->submit("Verify OTP");
         return $fb->toString();
     }
 
@@ -116,8 +161,6 @@ class PageGen {
             Enter phone number to opt in to alerts here: {$fb->toString()}
             EOF;
     }
-
-
 };
 
 ?>
