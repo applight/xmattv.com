@@ -3,37 +3,36 @@
 require_once './vendor/autoload.php';
 
 use Twilio\Rest\Client;
-$twilio = new Client(getenv("TWILIO_ACCOUNT_SID"), getenv("TWILIO_AUTH_TOKEN"));
+
+//$twilio = new Client(getenv("TWILIO_ACCOUNT_SID"), getenv("TWILIO_AUTH_TOKEN"));
 
 class MyDB extends SQLite3 {
     
     public function __construct() {
-        parent::__construct();
-        $this->open('users.db');
+        $this->open('./users.db');
     }
 
     public function attempt($q, $succ="Success!") {
         return $this->exec($q) ? $succ : $this->lastErrorMsg();
     }
 
-    /**
-     * returns []   if no key-value match exits in TABLE $table
-     *              otherwise, returns the row as an assoc array
-     */
     public function exists($key, $value, $table) {
-        $q =<<<EOF
-        SELECT * from {$table} WHERE {$key}={$value};
-        EOF;
-        return $this->querySingle($q, true);
+        $value = "'" . $value . "'";
+        return $this->querySingle(<<<EOF
+            SELECT * from {$table} WHERE {$key}={$value};
+            EOF, 
+            true);
     }
 
     public function select($key, $value, $table) {
+        $value = "'" . $value . "'";
         return $this->query(<<<EOF
         SELECT * from {$table} WHERE {$key}={$value};
         EOF);
     }
 
     public function firstSelect($key, $value, $table) {
+        $value = "'" . $value . "'";
         return $this->querySingle(<<<EOF
         SELECT * from {$table} WHERE {$key}={$value}; 
         EOF, true);
@@ -43,7 +42,9 @@ class MyDB extends SQLite3 {
 
 class UserManagement {
 
-    static private function createDatabase() {
+    static private $DEBUG = true;
+
+    static public function createDatabase() {
         
         // opens or creates sqllite database
         $db = new MyDB();
@@ -88,13 +89,13 @@ class UserManagement {
         if ($row == []) {
             $q =<<<EOF
             INSERT INTO NOTIFICATIONS (PHONE,NOTIFICATIONS)
-            VALUES ($phone, 1);
+            VALUES ('{$phone}', '1');
             EOF;
         } else {
             $notes = $f($row['NOTIFICATIONS']);
             $q =<<<EOF
             UPDATE NOTIFICATIONS set NOTIFICATIONS = {$notes} 
-            WHERE PHONE={$phone};
+            WHERE PHONE='{$phone}';
             EOF;
         }
 
@@ -104,7 +105,7 @@ class UserManagement {
     }
 
     static public function incNotifications( $phone ) {
-        return doNotifications( $phone, function ($noteCount) { return $noteCount++; } );
+        return doNotifications( $phone, function ($noteCount) { return ++$noteCount; } );
     }
 
     static public function seeNotifications( $phone ) {
@@ -115,12 +116,54 @@ class UserManagement {
      * check arguments for validity, this is injection suceptable 
      */
     static public function registerUser( $first, $last, $email, $phone ) {
-        if ( $db->exists("EMAIL", $email, "USERS") == [] ) {
-            $db->query(<<<EOF
-            INSERT INTO USERS (FIRST_NAME,LAST_NAME,EMAIL,EMAIL_VERIFIED,PHONE,PHONE_VERIFIED) 
-            VALUES ({$first},{$last},{$email},0,{$phone},0);
-            EOF);
-            return ($db->exists("EMAIL", $email, "USERS"))["ID"];
+        $db = new MyDB();
+
+        if ( $db->exists("PHONE", $phone, "USERS") == [] ) {
+    
+            if ( self::$DEBUG ) {
+                echo "<p>No user yet</p>";  
+            }
+
+            $authy_api = new Authy\AuthyApi(getenv("AUTHY_API_KEY"));
+            $user = $authy_api->registerUser($email, substr($phone, 2), 1); // email, cellphone, country_code
+
+            if ( self::$DEBUG ) {
+                if($user->ok()) {
+                    echo "<p>" . $user->id() . "</p>";
+                } else {
+                    foreach($user->errors() as $field => $message) {
+                        echo "<p>" . $field  . " = " . $message . "</p>";
+                    }
+                }
+            }
+            
+            $authyid = $user->id();
+
+            $result = $db->attempt(
+                <<<EOF
+                INSERT INTO USERS (FIRST_NAME,LAST_NAME,EMAIL,EMAIL_VERIFIED,PHONE,PHONE_VERIFIED,AUTHY_ID) 
+                VALUES ('{$first}','{$last}','{$email}','0','{$phone}','0','{$authyid}');
+                EOF,
+                "Added user successfully"
+            );
+
+            if ( self::$DEBUG ) {
+                echo "<p>{$result}</p>";
+            }
+
+            $row = $db->exists("PHONE", $phone, "USERS");
+            if ( $row != [] ) {
+                return $row["PHONE"];
+            } else {
+                if ( self::$DEBUG ) {
+                    echo "<p>User did not get added to database</p>";
+                }
+                // this means we couldn't write to the database...
+                return false;
+            }
+        }
+        if ( self::$DEBUG ) {
+            echo "<p>User exists came back with a user</p>";
         }
         // user existed
         return false;
@@ -131,6 +174,7 @@ class UserManagement {
      *          otherwise: the result of the query
      */
     static public function verifyEmail( $id ) {
+        $db = new MyDB();
 
         if ( $db->exists("ID", $id, "USERS") != [] ) {
             return $db->query(<<<EOF
@@ -146,6 +190,8 @@ class UserManagement {
      *          otherwise: the result of the query
      */
     static function verifyPhone( $id, $userOtp ) {
+        $db = new MyDB();
+
         $row = $db->exists("ID", $id, "USERS");
         if ( $row != [] ) {
             $verification_check = verifyOtp( $id, $userOtp );
@@ -167,32 +213,32 @@ class UserManagement {
         return false;
     }
 
-    static function verifyOtp( $id, $userOtp ) {
-        $row = $db->exists("ID", $id, "USERS");
+    static function verifyOtp( $phone, $userOtp ) {
+        $db = new MyDB();
+        $authy_api = new Authy\AuthyApi(getenv("AUTHY_API_KEY"));
+
+        $row = $db->exists("PHONE", $phone, "USERS");
         if ( $row != [] ) {
-            return $twilio->verify->v2->services("VA682a63884e464fbbcaab78d1f71af91a")
-            ->verificationChecks
-            ->create([
-                        "to" => $row['PHONE'],
-                        "code" => $userOtp
-            ]);
+            $authy_id = $row['AUTHY_ID'];
+            $verification = $authy_api->verifyToken($authy_id, $userOtp);
+            if ($verification->ok()) return $verification;
+            else return false;
         }
         return false;
     }
 
-    static function newOtp( $id ) {
-        $row = $db->exists("ID", $id, "USERS");
+    static function newOtp( $phone ) {
+        $db = new MyDB();
+        $authy_api = new Authy\AuthyApi(getenv("AUTHY_API_KEY"));
+
+        $row = $db->exists("PHONE", $phone, "USERS");
         if ( $row != [] ) {
-
-            $verification = $twilio->verify->v2->services("VA682a63884e464fbbcaab78d1f71af91a")
-            ->verifications
-            ->create($row['PHONE'], "sms");
-
-            return $verification;
+            $authy_id = $row['AUTHY_ID'];
+            $sms = $authy_api->requestSms($authy_id);
+            if ($sms->ok()) return $sms;
+            else return false;
         }
         return false;
     }
 
 }
-
-?>

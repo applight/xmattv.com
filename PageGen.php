@@ -1,6 +1,6 @@
 <?php
 require_once("./FormBuilder.php");
-require_once("./UserManagement.php");
+require_once("./FileUserManagement.php");
 
 session_start();
 
@@ -29,6 +29,7 @@ class PageGen {
             . '<meta name="description" content="" />'
             . '<meta name="keywords" content="" />'
             . '<link rel="stylesheet" href="assets/css/main.css" />'
+            . '<link rel="stylesheet" href="assets/css/messages.css" />'
             .  ($morecss != null ? '<link rel="stylesheet" href="assets/css/'.$morecss.'" />' : '')
             . '</head>';
     }
@@ -48,7 +49,7 @@ class PageGen {
         ."<li><a href=\"sms.php\">Two way messaging</a></li>" 
         ."<li><a href=\"assistant.php\">Twilio Assistant</a></li>" 
         ."<li><a href=\"" 
-        . ($_SESSION['loggedIn'] ? "logout.php\">Log Out</a></li>" : "login.php\">Log In</a></li><li><a href=\"register.php\">Register</a></li>")
+        . ( isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] ? "logout.php\">Log Out</a></li>" : "login.php\">Log In</a></li><li><a href=\"register.php\">Register</a></li>")
         ."</ul></nav>";
     }
 
@@ -99,7 +100,7 @@ class PageGen {
     }
     
     public function regForm() {
-        $fb = new FormBuilder('POST', './register.php');
+        $fb = new FormBuilder('POST', './verify.php');
         $fb->name("First Name", "first", "first", true);
         $fb->name("Last Name", "last", "last", true);
         $fb->email("email", true);
@@ -108,53 +109,37 @@ class PageGen {
         return $fb->toString();
     }
 
-    public function otp() {
+    public function login() {
+        $fb = new FormBuilder('POST', './login.php');
+        $fb->phone("phone", true);  
+        return $fb->toString();
+    }
 
+    public function otp($phone, $nextUrl) {
 
-        $test_input = function($data) {
-            $data = trim($data);
-            $data = stripslashes($data);
-            $data = htmlspecialchars($data);
-            return $data;
-        };
-
-        $first = test_input($_POST["first"]);
-        if (!preg_match("/^[a-zA-Z]+$/",$first)) {
-            return "<p>Only letters allowed in a first name</p>";
-        }
-
-        $last = test_input($_POST["last"]);
-        if (!preg_match("/^[a-zA-Z]+$/",$last)) {
-            return "<p>Only letters allowed in a last name</p>";
-        }
-
-        $email = test_input($_POST["email"]);
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return "<p>Invalid email format</p>";
-        }
-
-        $phone = test_input($_POST["phone"]);
-        if (!preg_match("/^(\+1)([0-9]{10})$/",$phone)) {
-            return "<p>Phone must be in the format +18005551212</p>";
-        }
-
-        $id = UserManagement::registerUser($first,$last,$email,$phone);
-        if ( ! $id  ) {
-            return "<p>Failed to register user</p>";
-        }
-
-        if ( ! UserManagement::newOtp($id) ) {
-            return "<p>Couldn't generate one-time-password</p>";
-        }
-
-        $fb = new FormBuilder('POST', './register.php');
+        $fb = new FormBuilder('POST', $nextUrl);
         $fb->code("code");
+        $fb->hidden("phone", "phone", $phone);
         $fb->submit("Verify OTP");
         return $fb->toString();
     }
 
+    public function clickAdvance($url, $message) {
+        $fb = new FormBuilder('POST', $url);
+        $fb->submit($message);
+        return $fb->toString();
+    }
+
+    public function redirect($url) {
+        return <<<EOF
+        <script>
+        setTimeout( function () {{ window.location.href='{$url}'; }}, 1500 ); 
+        </script>
+        EOF;
+    }
+
     public function optin() {
-        $fb = new FormBuilder('POST','');
+        $fb = new FormBuilder('POST','./final.php');
         $fb->text("Number","number","number","[\+]?[0-9]+",true,"+18005551212");
         $fb->submit("Opt In");
         return <<<EOF

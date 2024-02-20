@@ -28,7 +28,7 @@ echo $pagegen->banner();
 
 $msgs = [];
 
-$messages = $twilio->messages->read([], 20);
+$messages = $twilio->messages->read([], 50);
 
 echo "<div><ol>";
 foreach ($messages as $record) {
@@ -44,9 +44,9 @@ foreach ($messages as $record) {
 }
 echo "</ol></div>";
 
-echo "<div><ul>";
+echo "<div class=\"messages\"><ul class=\"messages\">";
 foreach ($msgs as $highlo => $ms) {
-	echo "<lh>{$highlo}</lh>";
+	echo "<lh class=\"msgHeader\">{$highlo}</lh>";
   foreach ($ms as $m) {
     if ( max($m->from,$m->to) == $m->from ) {
       echo "<li class=\"msgLeft\" >{$m->from} : {$m->body}</li>";

@@ -2,7 +2,8 @@
     "name": "applight/xmattv.com",
     "description": "MV personal website",
     "require": {
-        "twilio/sdk": "^7.13"
+        "twilio/sdk": "^7.13",
+        "authy/php": "^3.0"
     },
     "require-dev": {
         "twilio/sdk": "^7.13"
