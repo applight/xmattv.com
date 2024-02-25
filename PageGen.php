@@ -6,6 +6,8 @@ session_start();
 
 class PageGen {
 
+    private static $DEBUG = true;
+
     private static $instance = null;
     public static function title($title) { 
         if ( self::$instance == null ) self::$instance = new PageGen($title);
@@ -17,13 +19,61 @@ class PageGen {
     }
 
     private $title;
+    private $navElements = [];
 
     private function __construct($title) {
         $this->title = $title;
     }
 
+    /**
+     * Content can be a function or a string literal, a string literal is simply echo'ed
+     * a function, however, is called, with (if supplied) the arguments in array $arguments
+     * content must return a string
+     */
+    public function contentWrap( $content, $arguments=[] ) {
+        $pageString = $this->html() . $this->head() 
+            . "<body class=\"is-preload\">" . $this->header() 
+            . $this->nav() . $this->banner();
+
+        // insert page content either as string literal or result of calling $content()
+        switch ( gettype($content) ) {
+            case "string":
+                $pageString .= $content;
+                break;
+
+            case "object":
+                if ( get_class($content) == "Closure" ) {
+                    $pageString .= ( gettype($arguments) == "array" && $arguments != [] ? $content(...$arguments) : $content() ); 
+                } 
+                break;
+
+            default:
+                break;
+        }
+
+        return $pageString . $this->footer() . $this->tailscripts() . $this->closing();
+    }
+
+    public function page( $middle, $args=[] ) {
+        return $this->html() . $this->head() 
+        . "<body class=\"is-preload\">" . $this->header() . $this->nav() . $this->banner() 
+        . $this->$middle(...$args) 
+        . $this->footer() . $this->tailscripts() . $this->closing();
+    }
+
+    public function html() {
+        return <<<EOF
+        <!DOCTYPE html>
+        <html>
+        EOF;
+    }
+
+    public function closing() {
+        return "</body></html>";
+    }
+
     public function head($morecss=null) {
-        return '<head><title>' . $this->title . '</title>'
+        return  '<head><title>' . $this->title . '</title>'
             . '<meta charset="utf-8" />'
             . '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />'
             . '<meta name="description" content="" />'
@@ -40,17 +90,35 @@ class PageGen {
         .'<nav><a href="#menu">Menu</a></nav></header>';
     }
 
-    public function nav() {
-        return "<nav id=\"menu\">" 
-        ."<ul class=\"links\">" 
-        ."<li><a href=\"index.php\">Home</a></li>"
-        ."<li><a href=\"resume.php\">Resume</a></li>" 
-        ."<li><a href=\"blog.php\">Blog</a></li>" 
-        ."<li><a href=\"sms.php\">Two way messaging</a></li>" 
-        ."<li><a href=\"assistant.php\">Twilio Assistant</a></li>" 
-        ."<li><a href=\"" 
-        . ( isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] ? "logout.php\">Log Out</a></li>" : "login.php\">Log In</a></li><li><a href=\"register.php\">Register</a></li>")
-        ."</ul></nav>";
+    public function nav( $items=[] ) {
+        $items != []  ?? $this->navElements = $items;
+          
+        if ( $items == [] ) {
+            return "<nav id=\"menu\">" 
+            ."<ul class=\"links\">" 
+            ."<li><a href=\"index.php\">Home</a></li>"
+            ."<li><a href=\"resume.php\">Resume</a></li>" 
+            ."<li><a href=\"blog.php\">Blog</a></li>" 
+            ."<li><a href=\"sms.php\">Two way messaging</a></li>" 
+            ."<li><a href=\"assistant.php\">Twilio Assistant</a></li>" 
+            ."<li><a href=\"" 
+            . ( isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] ? "logout.php\">Log Out</a></li>" : "login.php\">Log In</a></li><li><a href=\"register.php\">Register</a></li>")
+            ."</ul></nav>";
+        } elseif ( gettype($items) == "array" ) {
+            $ul = "<ul class=\"links\">";
+            foreach($items as $text => $uri ) {
+                $li = "<li><a href=\"{$uri}\">{$text}</a></li>";
+                $ul .= $li;
+            }
+            
+            $ul .= "</ul>";
+            return "<nav id=\"menu\">" . $ul . "</nav>";
+        } elseif ( gettype($items) == "object" ) {
+            //TODO:
+            // build the nav bar based on a well formed objects 'instructions'
+        } else {
+            return "<nav id=\"menu\"><ul class=\"links\"><li>Broken nav</li></ul></nav>";
+        }
     }
 
     public function banner() {
