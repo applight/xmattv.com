@@ -3,7 +3,8 @@
     "description": "MV personal website",
     "require": {
         "twilio/sdk": "^7.13",
-        "authy/php": "^3.0"
+        "authy/php": "^3.0",
+        "google/apiclient": "^2.14"
     },
     "require-dev": {
         "twilio/sdk": "^7.13"

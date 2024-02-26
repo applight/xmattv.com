@@ -1,7 +1,7 @@
 <?php 
 require_once ('./PageGen.php'); 
 require_once ('./UserManagement.php'); 
-
+ 
 $pagegen = PageGen::title('Matt Vaughan Consulting');
 ?>
 <!DOCTYPE HTML>

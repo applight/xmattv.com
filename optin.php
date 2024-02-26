@@ -1,25 +1,9 @@
 <?php require_once('./PageGen.php'); 
 $pagegen = PageGen::title('Matt Vaughan Consulting');
+
+echo $pagegen->contentWrap( function($pg) {
+	return "<p>Please register first at <a href='register.php'>registration</a></p>!<!-- I don\'t like writing it this way:Coolify() -->"
+	. $pg->optin();
+	}, [ "pg" => $pagegen ] 
+);
 ?>
-<!DOCTYPE HTML>
-<html>
-<?php echo $pagegen->head(); ?>
-
-<body class="is-preload">
-
-<!-- Header -->
-<?php echo $pagegen->header(); ?>
-
-<!-- Nav -->
-<?php echo $pagegen->nav(); ?>
-
-<!-- Banner -->
-<?php echo $pagegen->banner(); ?>
-
-<?php 
-	echo $pagegen->optIn();
-	echo $pagegen->footer();
-	echo $pagegen->tailscripts();
-?>
-</body>
-</html>

@@ -48,8 +48,9 @@ class PageGen {
                 break;
 
             default:
+                $pageString .= "<p>" . gettype($content) .  "</p>";
                 break;
-        }
+        }   
 
         return $pageString . $this->footer() . $this->tailscripts() . $this->closing();
     }
@@ -91,8 +92,8 @@ class PageGen {
     }
 
     public function nav( $items=[] ) {
-        $items != []  ?? $this->navElements = $items;
-          
+        if ( $items == [] ) $items = $this->navElements;
+
         if ( $items == [] ) {
             return "<nav id=\"menu\">" 
             ."<ul class=\"links\">" 
