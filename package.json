@@ -11,7 +11,7 @@
   "dependencies": {
     "@zoom/videosdk": "^1.10.8",
     "app": "^0.1.0",
-    "express": "^4.18.3",
+    "express": "^4.19.2",
     "twilio": "^5.0.0"
   }
 }
