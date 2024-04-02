@@ -1,0 +1,17 @@
+{
+  "name": "xmattv.com",
+  "description": "xmattv.com",
+  "version": "1.0.0",
+  "main": "App.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@zoom/videosdk": "^1.10.8",
+    "app": "^0.1.0",
+    "express": "^4.18.3",
+    "twilio": "^5.0.0"
+  }
+}

@@ -1,6 +1,6 @@
 <?php
-require_once("./FormBuilder.php");
-require_once("./FileUserManagement.php");
+include_once('./FormBuilder.php');
+include_once("./UserManagement.php");
 
 session_start();
 
@@ -20,6 +20,24 @@ class PageGen {
 
     private $title;
     private $navElements = [];
+    private $headChildren = [];
+
+    // headChildren is a list or urls
+    public function setheadChildren($headChildren) {
+        $this->headChildren = $headChildren;
+    }
+
+    private function headChildren() {
+        $ret = "";
+        foreach( $this->headChildren as $tag => $attrs ) {
+            $ret .= "<{$tag}";
+            foreach( $attrs as $key => $val ) {
+                $ret .= " {$key}=\"{$val}\">";
+            }
+            $ret .= "</{$tag}>";
+        }
+        return $ret;
+    }
 
     private function __construct($title) {
         $this->title = $title;
@@ -74,7 +92,8 @@ class PageGen {
     }
 
     public function head($morecss=null) {
-        return  '<head><title>' . $this->title . '</title>'
+        return  '<head>' . $this->headChildren()
+            . '<title>' . $this->title . '</title>'
             . '<meta charset="utf-8" />'
             . '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />'
             . '<meta name="description" content="" />'

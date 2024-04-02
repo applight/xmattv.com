@@ -4,6 +4,7 @@ $pagegen = PageGen::title('Matt Vaughan Consulting');
 
 $js = <<<EOF
 <script>
+
 window.addEventListener("DOMContentLoaded", async event => {
   checkRegistration();
   
@@ -11,7 +12,7 @@ window.addEventListener("DOMContentLoaded", async event => {
   document.getElementById("unregister").addEventListener("click", unregister);
   
 });
-
+///opt/bitnami/letsencrypt/certificates 
 // Check a service worker registration status
 async function checkRegistration() {
   if ('serviceWorker' in navigator) {
@@ -33,16 +34,7 @@ async function register() {
       // Change the service worker URL to see what happens when the SW doesn't exist
       const registration = await navigator.serviceWorker.register("./serviceworker.js");
       document.getElementById("output").innerHTML += "<br/>Service worker registered";
-
-      navigator.serviceWorker.ready.then( (reg) =>{
-        reg.active.postMessage("Test message sent after creation");
-      });
-      
-      navigator.serviceWorker.addEventListener("message", (event) => {
-        console.log(event.data.msg, event.data.url);
-        document.getElementById("output").innerHTML += `<br/>${event.data.msg} : ${event.data.url}`;
-      });
-
+       
     } catch (error) {
       document.getElementById("output").innerHTML += "<br/>Error while registering: " + error.message;
     }    
@@ -61,8 +53,7 @@ async function unregister()  {
         document.getElementById("output").innerHTML += result ? "<br/>Service worker unregistered" : "<br/>Service worker couldn't be unregistered";
       } else {
         document.getElementById("output").innerHTML += "<br/>There is no service worker to unregister";
-      }
-       
+      }     
     } catch (error) {
       document.getElementById("output").innerHTML +="Error while unregistering: " + error.message;
     }    

@@ -15,6 +15,42 @@ client.init('en-US', 'Global', { patchJsMedia: true }).then( () => {
     client.join(context.topic, context.jwt, context.username).then( () => {
         stream = client.getMediaStream()
     });
+})
+.then( () => {
+    stream.startVideo({ virtualBackground: { imageUrl: './sw1.jpg' } }).then(() => {
+        stream.attachVideo(stream.getCurrentUserInfo().userId, RESOLUTION).then((userVideo) => {
+          document.querySelector('video-player-container').appendChild(userVideo)
+        })
+    })
+    
+    
+    if (stream.isRenderSelfViewWithVideoElement()) {
+        stream.startVideo({ videoElement: document.querySelector('#my-self-view-video') })
+        .then(() => {
+        // video successfully started and rendered
+        })
+        .catch((error) => {
+        console.log(error)
+        })
+    } else {
+        stream.startVideo()
+        .then(() => {
+        stream.renderVideo(
+            document.querySelector('#my-self-view-canvas'),
+            client.getCurrentUserInfo().userId, 1920, 1080, 0, 0, 3)
+            .then(() => {
+            // video successfully started and rendered
+            })
+            .catch((error) => {
+            console.log(error)
+            })
+        })
+        .catch((error) => {
+        console.log(error)
+        })
+    }
+      
+
 });
 
 client.on('user-added', (payload) => {
@@ -44,39 +80,3 @@ client.on('connection-change', (payload) => {
 })
 
 
-stream.startVideo({ virtualBackground: { imageUrl: './sw1.jpg' } }).then(() => {
-    stream.attachVideo(stream.getCurrentUserInfo().userId, RESOLUTION).then((userVideo) => {
-      document.querySelector('video-player-container').appendChild(userVideo)
-    })
-  })
-
-
-if (stream.isRenderSelfViewWithVideoElement()) {
-stream
-    .startVideo({ videoElement: document.querySelector('#my-self-view-video') })
-    .then(() => {
-    // video successfully started and rendered
-    })
-    .catch((error) => {
-    console.log(error)
-    })
-} else {
-stream
-    .startVideo()
-    .then(() => {
-    stream
-        .renderVideo(
-        document.querySelector('#my-self-view-canvas'),
-        client.getCurrentUserInfo().userId, 1920, 1080, 0, 0, 3)
-        .then(() => {
-        // video successfully started and rendered
-        })
-        .catch((error) => {
-        console.log(error)
-        })
-    })
-    .catch((error) => {
-    console.log(error)
-    })
-}
-  

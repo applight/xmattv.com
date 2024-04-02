@@ -2,13 +2,14 @@
 include_once('./PageGen.php');
 
 $pagegen = PageGen::title('Cam');
-$pagegen->setHeadChildren( ['script' => ['src' => 'https://source.zoom.us/videosdk/zoom-video-1.9.8.min.js'] ] );
+$pagegen->setHeadChildren( ['script' => ['src' => 'http://source.zoom.us/videosdk/zoom-video-1.9.8.min.js'] ] );
 
 $content = <<<EOF
 <div>
 <video-player-container></video-player-container>
 
 <video id="my-self-view-video" width="1920" height="1080"></video>
+
 <canvas id="my-self-view-canvas" width="1920" height="1080"></canvas>
 
 </div>
