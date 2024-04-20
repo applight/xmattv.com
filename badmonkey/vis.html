@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+    </head>
+    <body>
+        <div id="content">
+            <canvas class="visualizer" width="640" height="100"></canvas>
+            <button id="init" onclick="init()">Start</button>
+        </div>
+        <div>
+            <input name="display" type="radio" value="sine" checked>sine</input>
+            <input name="display" type="radio" value="frequency">frequency</input>
+            </br>
+            <input name="rounding" type="radio" value="note" checked>note</input>
+            <input name="rounding" type="radio" value="none">none</input>
+            </br>
+            <input type="radio" id="roundingNone" name="rounding" value="none">
+            <label for="roundingNone">No rounding</label>
+            <br>
+            <input type="radio" id="roundingMedium" name="rounding" value="hz" checked="">
+            <label for="roundingMedium">Round to nearest Hz</label>
+            <br>
+            <input type="radio" id="roundingHard" name="rounding" value="note">
+            <label for="roundingHard">Round to nearest note</label>
+            <br>
+
+            <div>
+                <input type="radio" id="smoothingNone" name="smoothing" value="none">
+                <label for="smoothingNone">No smoothing</label>
+                <br>
+                <input type="radio" id="smoothingMedium" name="smoothing" value="basic" checked="">
+                <label for="smoothingMedium">Basic smoothing</label>
+                <br>
+                <input type="radio" id="smoothingHard" name="smoothing" value="very">
+                <label for="smoothingHard">Very smoothed (note must be more consistent and held for longer)</label>
+                <br>
+              </div>
+
+              <p id="note"></p>
+        </div>
+
+
+        <script src="tuner.js"></script>
+        <script>
+            init();
+        </script>
+    </body>
+</html>
